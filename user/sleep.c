@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
     fprintf(2, "Usage: sleep time\n");
     exit(1);
   }
-  int time = atoi(argv[1]) * 10; /* What? */
+  int time = atoi(argv[1]); /* What? */
   pause(time);
   exit(0);
 }
