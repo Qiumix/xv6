@@ -30,7 +30,7 @@ void sixfive(int fd) {
           num_buf[num_len] = 0;
           int num = atoi(num_buf);
           if (num % 5 == 0 || num % 6 == 0) {
-            write(1, num_buf, strlen(num_buf));
+            printf("%d\n", num);
           }
           is_reading = 0;
         }
@@ -50,7 +50,7 @@ void sixfive(int fd) {
     num_buf[num_len] = 0;
     int num = atoi(num_buf);
     if (num % 5 == 0 || num % 6 == 0) {
-      write(1, num_buf, strlen(num_buf));
+      printf("%d\n", num);
     }
   }
 }
