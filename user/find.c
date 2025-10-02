@@ -40,7 +40,7 @@ void find(char *path, char *name) {
         printf("ls: cannot stat %s\n", buf);
         continue;
       }
-      printf("%s %d %d %d\n", fmtname(buf), st.type, st.ino, (int)st.size);
+      // printf("%s %d %d %d\n", fmtname(buf), st.type, st.ino, (int)st.size);
     }
     break;
   }
