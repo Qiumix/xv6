@@ -5,7 +5,7 @@
 #include "kernel/fcntl.h"
 #define BUF_SIZE 512
 char *fmtname(char *path) {
-  static char buf[DIRSIZ];
+  static char buf[DIRSIZ + 1];
   char *p;
 
   // Find first character after last slash.
@@ -17,7 +17,7 @@ char *fmtname(char *path) {
   if (strlen(p) >= DIRSIZ)
     return p;
   memmove(buf, p, strlen(p));
-  buf[strlen(p)] = '\0';
+  memset(buf + strlen(p), ' ', DIRSIZ - strlen(p));
   return buf;
 }
 
@@ -41,10 +41,12 @@ void find(char *path, char *name) {
   struct stat st;
 
   if ((fd = open(path, O_RDONLY)) < 0) {
+    fprintf(2, "find: failed to open %s\n", path);
     return;
   }
 
   if (fstat(fd, &st) < 0) {
+    fprintf(2, "find: failed to stat %s\n", path);
     close(fd);
     return;
   }
@@ -81,9 +83,9 @@ void find(char *path, char *name) {
       if (st.type == T_FILE) {
         if (strcmp(name, de.name) == 0) {
           printf("%s\n", buf);
-        } else {
-          find(buf, name);
         }
+      } else if (st.type == T_DIR) {
+        find(buf, name);
       }
     }
     break;
@@ -92,10 +94,11 @@ void find(char *path, char *name) {
 }
 int main(int argc, char **argv) {
   if (argc != 3) {
-    fprintf(2, "find usage: find [dirname] [filename]");
+    fprintf(2, "usage: find [dirname] [filename]");
     exit(1);
   }
   char *path = argv[1];
-  find(path, argv[2]);
-  return 0;
+  char *filename = argv[2];
+  find(path, filename);
+  exit(0);
 }
